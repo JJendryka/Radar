@@ -1,10 +1,17 @@
-from multiprocessing.queues import Queue
+from multiprocessing import Queue
 from utils import Window, InstructionType, Settings
 import scipy.signal as signal
+import scipy
 import numpy as np
 import time
 
 import unifiedlab.oscilloscopes as scopes
+
+
+def run(unprocessed_queue: Queue, processed_queue: Queue, instruction_queue: Queue):
+    processor = Processor(
+        unprocessed_queue, processed_queue, instruction_queue)
+    processor.run()
 
 
 class Processor():
@@ -22,7 +29,7 @@ class Processor():
 
         self.calibration_data: np.ndarray = None
 
-        self.scope: scopes.oscilloscope.Oscilloscope = None
+        self.scope: scopes.oscilloscope.Oscilloscope = 1  # None
 
         self.history: Queue = None
         self.averaged: np.ndarray = None
@@ -48,12 +55,16 @@ class Processor():
                 time.sleep(0.1)
 
     def acquire(self):
-        acquisition = self.scope.get(1)
+        # acquisition = self.scope.get(1)
+        acquisition = scopes.acquisition.Acquisition(1)
+        acquisition.data = np.sin(np.linspace(0, 60, 10000))
+        acquisition.horizontal = scopes.acquisition.HorizontalProperties(
+            1e-7, 20000, 0.5e-3)
         data = acquisition.data
 
         data = self.cut_out(data, acquisition)
         data = self.decimate(data)
-        data = self.window(data)
+        data = self.apply_window(data)
 
         self.unprocessed_queue.put(data)
 
@@ -62,17 +73,20 @@ class Processor():
         data = self.time_average(data)
         data = self.apply_calibration(data)
 
-        self.processed_queue(data)
+        self.processed_queue.put(data)
+
+        time.sleep(0.1)
 
     def cut_out(self, data, acquisition):
         sample_period = acquisition.horizontal.interval
         signal_period = 1/self.frequency
         sample_count = int(signal_period/sample_period)
-        trigger_sample_index = acquisition.horizontal.offset/acquisition.horizontal.interval
+        trigger_sample_index = int(
+            acquisition.horizontal.offset/acquisition.horizontal.interval)
         data = data[trigger_sample_index:trigger_sample_index+sample_count]
         return data
 
-    def window(self, data):
+    def apply_window(self, data):
         if self.window is not None:
             window = None
             if self.window == Window.HAMMING:
@@ -91,26 +105,28 @@ class Processor():
         return data
 
     def fft(self, data):
-        data = signal.fft(data, workers=-1)
+        data = scipy.fft.fft(data, workers=-1)
         return data
 
     def space_average(self, data):
-        data = np.convolve(data, np.ones(self.space_averages),
-                           'same') / self.space_averages
+        if self.space_averages > 1:
+            data = np.convolve(data, np.ones(self.space_averages),
+                               'same') / self.space_averages
         return data
 
     def time_average(self, data):
-        # Initalize queue if empty
-        if self.history is None or self.averaged is None:
-            self.averaged = data
-            self.history = None
-            for i in range(self.time_averages):
-                self.history.put(data)
+        if self.time_averages > 1:
+            # Initalize queue if empty
+            if self.history is None or self.averaged is None:
+                self.averaged = data
+                self.history = None
+                for i in range(self.time_averages):
+                    self.history.put(data)
 
-        self.history.put(data)
-        self.averaged += data / self.time_averages
-        self.averaged -= self.history.get() / self.time_averages
-        data = self.averaged
+            self.history.put(data)
+            self.averaged += data / self.time_averages
+            self.averaged -= self.history.get() / self.time_averages
+            data = self.averaged
         return data
 
     def apply_calibration(self, data):

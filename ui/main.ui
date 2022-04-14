@@ -28,7 +28,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QWidget" name="small2DPlot" native="true"/>
+           <widget class="Plot2DWidget" name="small2DPlot" native="true"/>
           </item>
           <item>
            <widget class="QWidget" name="smallWaterfallPlot" native="true"/>
@@ -281,6 +281,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Plot2DWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">plot2dwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

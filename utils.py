@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class Window(Enum):
     HAMMING = 1
     BLACKMANN = 2
