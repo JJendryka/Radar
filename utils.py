@@ -1,10 +1,11 @@
 from enum import Enum
 
 
-class Window(Enum):
+class WindowType(Enum):
     HAMMING = 1
     BLACKMANN = 2
     HANNING = 3
+    RECTANGULAR = 4
 
 
 class InstructionType(Enum):
@@ -15,34 +16,11 @@ class InstructionType(Enum):
 
 
 class Settings():
-    def __init__(self):
-        self.use_calibration = None
-        self.time_averages = None
-        self.space_averages = None
-        self.decimation = None
-        self.window = None
-        self.frequency = None
-
-    def use_calibration(self, val):
-        self.use_calibration = val
-        return self
-
-    def time_averages(self, val):
-        self.time_averages = val
-        return self
-
-    def space_averages(self, val):
-        self.space_averages = val
-        return self
-
-    def decimation(self, val):
-        self.decimation = val
-        return self
-
-    def window(self, val):
-        self.window = val
-        return self
-
-    def frequency(self, val):
-        self.frequency = val
-        return self
+    def __init__(self, use_calibration=None, time_averages=None, space_averages=None, decimation=None, window=None, frequency=None, span=None):
+        self.use_calibration = use_calibration
+        self.time_averages = time_averages
+        self.space_averages = space_averages
+        self.decimation = decimation
+        self.window = window
+        self.frequency = frequency
+        self.span = span

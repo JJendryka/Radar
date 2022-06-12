@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>906</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
            <widget class="Plot2DWidget" name="small2DPlot" native="true"/>
           </item>
           <item>
-           <widget class="QWidget" name="smallWaterfallPlot" native="true"/>
+           <widget class="WaterfallWidget" name="smallWaterfallPlot" native="true"/>
           </item>
          </layout>
         </item>
@@ -55,20 +55,15 @@
             </item>
             <item>
              <widget class="QSlider" name="verticalScaleSlider">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+              <property name="minimum">
+               <number>1</number>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Vertical offset:</string>
+              <property name="maximum">
+               <number>100</number>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSlider" name="verticalOffsetSlider">
+              <property name="value">
+               <number>100</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -83,6 +78,18 @@
             </item>
             <item>
              <widget class="QSlider" name="rangeSlider">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="singleStep">
+               <number>1</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -101,7 +108,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="timeAverageBox"/>
+               <widget class="QSpinBox" name="timeAverageBox">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QLabel" name="label_3">
@@ -114,7 +125,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spaceAverageBox"/>
+               <widget class="QSpinBox" name="spaceAverageBox">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -123,12 +138,19 @@
               <item>
                <widget class="QLabel" name="label_4">
                 <property name="text">
-                 <string>Decimation</string>
+                 <string>Decimation:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="decimationBox"/>
+               <widget class="QSpinBox" name="decimationBox">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -175,13 +197,6 @@
              </layout>
             </item>
             <item>
-             <widget class="QCheckBox" name="logarithmicCheckbox">
-              <property name="text">
-               <string>Logarithmic</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QLabel" name="label_7">
               <property name="text">
                <string>Waterfall Speed:</string>
@@ -190,6 +205,12 @@
             </item>
             <item>
              <widget class="QSlider" name="waterfallSpeedSlider">
+              <property name="maximum">
+               <number>2000</number>
+              </property>
+              <property name="value">
+               <number>20</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -218,60 +239,147 @@
        <attribute name="title">
         <string>Input</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,0">
+       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0">
         <item>
-         <widget class="QWidget" name="widget_3" native="true"/>
+         <widget class="Plot2DWidget" name="input2DPlot" native="true"/>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="10,10,5,5">
           <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Window function:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLineEdit" name="ipLineEdit">
+              <property name="text">
+               <string>127.0.0.1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="connecButton">
+              <property name="text">
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QComboBox" name="windowFunctionCombobox">
-            <property name="editable">
-             <bool>false</bool>
-            </property>
-            <property name="currentText">
-             <string>Hamming</string>
-            </property>
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
-             <property name="text">
-              <string>Hamming</string>
-             </property>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Window function:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Blackmann</string>
-             </property>
+             <widget class="QComboBox" name="windowFunctionCombobox">
+              <property name="editable">
+               <bool>false</bool>
+              </property>
+              <property name="currentText">
+               <string>Rectangular</string>
+              </property>
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text">
+                <string>Rectangular</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hamming</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Blackmann</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hanning</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Frequency [Hz]:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Hanning</string>
-             </property>
+             <widget class="QSpinBox" name="frequencyBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>100000</number>
+              </property>
+              <property name="singleStep">
+               <number>100</number>
+              </property>
+              <property name="stepType">
+               <enum>QAbstractSpinBox::DefaultStepType</enum>
+              </property>
+              <property name="value">
+               <number>1000</number>
+              </property>
+             </widget>
             </item>
-           </widget>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Span [MHz]:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spanBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>500</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3">
+      <widget class="Plot2DWidget" name="big2Dplot">
        <attribute name="title">
         <string>2D</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="WaterfallWidget" name="bigWaterfallPlot">
        <attribute name="title">
         <string>Waterfall</string>
        </attribute>
@@ -286,6 +394,12 @@
    <class>Plot2DWidget</class>
    <extends>QWidget</extends>
    <header location="global">plot2dwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WaterfallWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">waterfallwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
